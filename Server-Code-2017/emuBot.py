@@ -1,7 +1,15 @@
 from pyax12.connection import Connection
 import time
 import threading
-sc = Connection(port="/dev/ttyACM0", baudrate=1000000)
+
+#Sometimes if USB2AX is bumped, name will change from /dev/ttyACM0 to /dev/ttyACM1.
+for bump in range(3): #Check if USB2AX was bumped
+        try:
+                sc = Connection(port="/dev/ttyACM" + str(bump), baudrate=1000000)
+        except:
+                if bump == 2: #Assuming you didn't somehow bump it 3 times in a row in quick succession.
+                        print("USB2AX does not seem to be connected!")
+                pass
 
 sc.flush()
 
